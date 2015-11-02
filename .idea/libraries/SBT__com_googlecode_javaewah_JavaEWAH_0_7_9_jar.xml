@@ -1,6 +1,8 @@
 <component name="libraryTable">
   <library name="SBT: com.googlecode.javaewah:JavaEWAH:0.7.9:jar">
-    <CLASSES />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.googlecode.javaewah/JavaEWAH/bundles/JavaEWAH-0.7.9.jar!/" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>

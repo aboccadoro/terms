@@ -37,11 +37,12 @@ object BooleanExpr extends BooleanLanguage {
   sealed trait Expr
 
   // TODO: Define your case classes here.
-
-
-
-
-
+  case class True() extends Expr
+  case class False() extends Expr
+  case class Not(s: SExpr) extends Expr
+  case class And(e1: SExpr, e2: SExpr) extends Expr
+  case class Or(e1: SExpr, e2: SExpr) extends Expr
+  case class If(c: SExpr, e1: SExpr, e2: SExpr) extends Expr
 
   // TODO: implement the parse method.
   // The parse method translates an SExpr type into the Expr types
