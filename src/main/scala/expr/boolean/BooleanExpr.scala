@@ -1,5 +1,6 @@
 package expr.boolean
 
+import com.sun.javaws.exceptions.InvalidArgumentException
 import sexpr._
 
 /**
@@ -61,8 +62,18 @@ object BooleanExpr extends BooleanLanguage {
   //
   // If you are given an improperly formatted boolean sexpr you must
   // throw an IllegalArgumentException.
+  /**
+   * parse takes in an SExpr composed of a list of
+   * SCons known as an SList. This SList represents the
+   * Expr instructions to be evaluated latter. The function
+   * parses the SExpr into an Expr that can be evaluated by
+   * the eval function. The latter half of this pattern
+   * matching function deals with nested SExpr where the
+   * operator may take another operator as a parameter.
+   * @param ss
+   * @return an Expr to be evaluated
+   */
   def parse(ss: SExpr): Expr = ss match {
-    case SNil => throw new IllegalArgumentException
     case T => True
     case F => False
     case SCons(T, SNil) => True
@@ -123,6 +134,15 @@ object BooleanExpr extends BooleanLanguage {
   // (4) Your eval function will always evaluate the given expression
   //     to either the true or false boolean expression.
   //
+  /**
+   * eval takes an Expr composed of boolean operators and values
+   * and computes their compound value after applying their
+   * rules on the defined values in the expression. The latter
+   * half of this pattern matching function handles polynomial
+   * boolean expressions that are nested within an Expr.
+   * @param e the Expr to be evaluated
+   * @return an Expr that has evaluated to True or False
+   */
   def eval(e: Expr): Expr = e match {
     case True => True
     case False => False
@@ -137,6 +157,7 @@ object BooleanExpr extends BooleanLanguage {
     case And(e1, e2) => eval(And(eval(e1), eval(e2)))
     case Or(e1, e2) => eval(Or(eval(e1), eval(e2)))
     case Not(e1) => eval(Not(eval(e1)))
+    case _ => throw new IllegalArgumentException
   }
 }
 

@@ -1,6 +1,5 @@
 package expr.boolean
 
-import sexpr._
 import BooleanExpr._
 
 object Driver extends App {
