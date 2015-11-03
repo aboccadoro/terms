@@ -37,12 +37,12 @@ object BooleanExpr extends BooleanLanguage {
   sealed trait Expr
 
   // TODO: Define your case classes here.
-  case class True() extends Expr
-  case class False() extends Expr
-  case class Not(s: SExpr) extends Expr
-  case class And(e1: SExpr, e2: SExpr) extends Expr
-  case class Or(e1: SExpr, e2: SExpr) extends Expr
-  case class If(c: SExpr, e1: SExpr, e2: SExpr) extends Expr
+  case object True extends Expr
+  case object False extends Expr
+  case class Not(e1: Expr) extends Expr
+  case class And(e1: Expr, e2: Expr) extends Expr
+  case class Or(e1: Expr, e2: Expr) extends Expr
+  case class If(c: Expr, e1: Expr, e2: Expr) extends Expr
 
   // TODO: implement the parse method.
   // The parse method translates an SExpr type into the Expr types
@@ -58,12 +58,29 @@ object BooleanExpr extends BooleanLanguage {
   // You will need to pay attention to the structure of the sexprs
   // for proper translation.
   //
-  // You must you pattern matching and recursion in your
+  // You must use pattern matching and recursion in your
   // implementation.
   //
   // If you are given an improperly formatted boolean sexpr you must
   // throw an IllegalArgumentException.
-  def parse(ss: SExpr): Expr = ???
+  def parse(ss: SExpr): Expr = l(ss) match {
+    case SNil => throw new IllegalArgumentException
+    case SCons(T, SNil) => True
+    case SCons(F, SNil) => False
+    case SCons(NOT, e1) => Not(parse(e1))
+    case SCons(AND, tail) => tail match {
+      case SCons(e1, e2) => And(parse(e1), parse(e2))
+    }
+    case SCons(OR, tail) => tail match {
+      case SCons(e1, e2) => Or(parse(e1), parse(e2))
+    }
+    case SCons(IF, tail) => tail match {
+      case SCons(c, expr) => If(parse(c), expr match {
+        case SCons(e1, e2) => parse(e1) }, expr match {
+          case SCons(_, e2) => parse(e2)})
+      }
+    case _ => throw new IllegalArgumentException
+  }
 
   // TODO: implement the eval method.
   //
@@ -87,7 +104,7 @@ object BooleanExpr extends BooleanLanguage {
   //     rule you will need to recursively evaluate e.
   //
   // (2) Although we have given you most rules above, there are other
-  //     fules that you will need to implement for proper evaluation.
+  //     rules that you will need to implement for proper evaluation.
   //     That is, you must adhere to (4) below for your implementation
   //     to be correct.
   //
@@ -96,5 +113,17 @@ object BooleanExpr extends BooleanLanguage {
   // (4) Your eval function will always evaluate the given expression
   //     to either the true or false boolean expression.
   //
-  def eval(e: Expr): Expr = ???
+  def eval(e: Expr): Expr = e match {
+    case True => True
+    case False => False
+    case Not(True) => False
+    case Not(False) => True
+    case And(True, e1) => eval(e1)
+    case And(False, _) => False
+    case Or(True, _) => True
+    case Or(False, e1) => eval(e1)
+    case If(True, e1, e2) => eval(e1)
+    case If(False, e1, e2) => eval(e2)
+  }
 }
+
