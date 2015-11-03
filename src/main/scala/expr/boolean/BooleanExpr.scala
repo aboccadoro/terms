@@ -90,6 +90,7 @@ object BooleanExpr extends BooleanLanguage {
         case SCons(e1, _) => parse(e1) }, expr match {
           case SCons(_, e2) => parse(e2)})
       }
+    case SCons(SCons(NOT, last), SNil) => Not(parse(last))
     case SCons(SCons(AND, last), SNil) => last match {
       case SCons(e1, e2) => And(parse(e1), parse(e2))
     }
