@@ -47,7 +47,6 @@ class PublicBooleanExprSuite extends FunSuite {
   }
 
   test("[6] Boolean language &&(||(T,F),&&(F,T)) must evaluate to False") {
-    println(&&(||(T,F),&&(F,T)).toString)
     val r = eval(parse(&&(||(T,F),&&(F,T))))
     assert(r.toString == "False")
   }

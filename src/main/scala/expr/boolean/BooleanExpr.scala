@@ -36,7 +36,6 @@ import sexpr._
 object BooleanExpr extends BooleanLanguage {
   sealed trait Expr
 
-  // TODO: Define your case classes here.
   case object True extends Expr
   case object False extends Expr
   case class Not(e1: Expr) extends Expr
@@ -44,7 +43,6 @@ object BooleanExpr extends BooleanLanguage {
   case class Or(e1: Expr, e2: Expr) extends Expr
   case class If(c: Expr, e1: Expr, e2: Expr) extends Expr
 
-  // TODO: implement the parse method.
   // The parse method translates an SExpr type into the Expr types
   // that you defined above. This allows us to define boolean
   // expressions using sexpr form - which decouples your
@@ -95,7 +93,6 @@ object BooleanExpr extends BooleanLanguage {
     case _ => throw new IllegalArgumentException
   }
 
-  // TODO: implement the eval method.
   //
   // The eval function "evaluates" a boolean expression. Your function
   // must implement the following rules:
@@ -137,6 +134,9 @@ object BooleanExpr extends BooleanLanguage {
     case Or(False, e1) => eval(e1)
     case If(True, e1, e2) => eval(e1)
     case If(False, e1, e2) => eval(e2)
+    case And(e1, e2) => eval(And(eval(e1), eval(e2)))
+    case Or(e1, e2) => eval(Or(eval(e1), eval(e2)))
+    case Not(e1) => eval(Not(eval(e1)))
   }
 }
 
