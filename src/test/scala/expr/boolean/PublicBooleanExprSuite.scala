@@ -18,7 +18,6 @@ class PublicBooleanExprSuite extends FunSuite {
 
   test("[3] Boolean language &&(T,F) must parse to And(True, False)") {
     val r = parse(&&(T,F))
-    println(r)
     assert(r.toString == "And(True,False)")
   }
 
@@ -48,6 +47,7 @@ class PublicBooleanExprSuite extends FunSuite {
   }
 
   test("[6] Boolean language &&(||(T,F),&&(F,T)) must evaluate to False") {
+    println(&&(||(T,F),&&(F,T)).toString)
     val r = eval(parse(&&(||(T,F),&&(F,T))))
     assert(r.toString == "False")
   }

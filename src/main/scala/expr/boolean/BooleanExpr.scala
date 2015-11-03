@@ -63,8 +63,10 @@ object BooleanExpr extends BooleanLanguage {
   //
   // If you are given an improperly formatted boolean sexpr you must
   // throw an IllegalArgumentException.
-  def parse(ss: SExpr): Expr = l(ss) match {
+  def parse(ss: SExpr): Expr = ss match {
     case SNil => throw new IllegalArgumentException
+    case T => True
+    case F => False
     case SCons(T, SNil) => True
     case SCons(F, SNil) => False
     case SCons(NOT, e1) => Not(parse(e1))
